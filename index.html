@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Valor por Hora</title>
+    <style>
+        /* CSS - Estilização Visual */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #219653;
+        }
+
+        .resultado-box {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-left: 5px solid #27ae60;
+            border-radius: 4px;
+            text-align: center;
+            display: none; /* Escondido até o cálculo ser feito */
+        }
+
+        .resultado-box.ativo {
+            display: block;
+        }
+
+        #valorHora {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HTML - Estrutura da Página -->
+    <div class="container">
+        <h2>Quanto Cobrar por Hora?</h2>
+        
+        <div class="form-group">
+            <label for="salario">Salário mensal desejado (R$):</label>
+            <input type="number" id="salario" placeholder="Ex: 5000">
+        </div>
+
+        <div class="form-group">
+            <label for="horasDia">Horas produtivas por dia:</label>
+            <input type="number" id="horasDia" placeholder="Ex: 6">
+        </div>
+
+        <div class="form-group">
+            <label for="diasSemana">Dias trabalhados por semana:</label>
+            <input type="number" id="diasSemana" placeholder="Ex: 5">
+        </div>
+
+        <button onclick="calcularValorHora()">Calcular Valor da Hora</button>
+
+        <div id="resultadoContainer" class="resultado-box">
+            <p>Seu valor ideal por hora é:</p>
+            <div id="valorHora">R$ 0,00</div>
+        </div>
+    </div>
+
+    <!-- JavaScript - Lógica do Projeto -->
+    <script>
+        function calcularValorHora() {
+            // 1. Captura os valores digitados nos inputs (convertendo para número)
+            const salario = Number(document.getElementById('salario').value);
+            const horasDia = Number(document.getElementById('horasDia').value);
+            const diasSemana = Number(document.getElementById('diasSemana').value);
+            
+            // Elementos da tela que vamos modificar
+            const resultadoContainer = document.getElementById('resultadoContainer');
+            const txtValorHora = document.getElementById('valorHora');
+
+            // 2. Validação simples: impede campos vazios ou iguais a zero
+            if (!salario || !horasDia || !diasSemana) {
+                alert("Por favor, preencha todos os campos com valores válidos!");
+                return;
+            }
+
+            // 3. O Cálculo Lógico:
+            // Consideramos que um mês tem em média 4.33 semanas
+            const horasPorSemana = horasDia * diasSemana;
+            const totalHorasMes = horasPorSemana * 4.33;
+            
+            // O valor da hora é o salário dividido pelo total de horas trabalhadas no mês
+            const valorPorHora = salario / totalHorasMes;
+
+            // 4. Exibe o resultado formatado como moeda brasileira (R$)
+            txtValorHora.innerHTML = valorPorHora.toLocaleString('pt-BR', { 
+                style: 'currency', 
+                currency: 'BRL' 
+            });
+
+            // 5. Mostra a caixinha verde de resultado adicionando a classe do CSS
+            resultadoContainer.classList.add('ativo');
+        }
+    </script>
+</body>
+</html>
